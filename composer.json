@@ -6,5 +6,8 @@
     },
     "require": {
         "doctrine/orm": "^2.6"
+    },
+    "script":  {
+        "serve": "php -S localhost:8080 -t public"
     }
 }
