@@ -12,6 +12,13 @@ if (!array_key_exists($caminho, $rotas)) {
     exit;
 }
 
+session_start();
+
+if (!isset($_SESSION['logado']) && !in_array($caminho, ['/login', '/realiza-login'])) {
+    header('Location: /login');
+    exit;
+}
+
 /** @var InterfaceControladorRequisicao $controlador */
 $controlador = new $rotas[$caminho];
 $controlador->processaRequisicao();
