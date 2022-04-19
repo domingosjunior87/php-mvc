@@ -26,7 +26,7 @@ class RealizarLogin extends Controller
 
         if (is_null($email) || $email === false) {
             $this->defineMensagem('danger', 'E-mail inválido');
-            return new Response(400, ['Location' => '/login']);
+            return new Response(302, ['Location' => '/login']);
         }
 
         $senha = filter_input(INPUT_POST, 'senha', FILTER_SANITIZE_STRING);
@@ -36,11 +36,11 @@ class RealizarLogin extends Controller
 
         if (is_null($usuario) || !$usuario->senhaEstaCorreta($senha)) {
             $this->defineMensagem('danger', 'E-mail ou senha inválidos');
-            return new Response(400, ['Location' => '/login']);
+            return new Response(302, ['Location' => '/login']);
         }
 
         $_SESSION['logado'] = true;
 
-        return new Response(200, ['Location' => '/listar-cursos']);
+        return new Response(302, ['Location' => '/listar-cursos']);
     }
 }

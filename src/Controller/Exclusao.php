@@ -23,11 +23,12 @@ class Exclusao extends Controller
 
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
-        $id = filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $id = $request->getQueryParams()['id'];
+        $id = filter_var($id, FILTER_VALIDATE_INT);
 
         if ($id === null || $id === false) {
             $this->defineMensagem('danger', 'Curso inexistente');
-            return new Response(400, ['Location' => '/listar-cursos']);
+            return new Response(302, ['Location' => '/listar-cursos']);
         }
 
         $curso = $this->entityManager->getReference(Curso::class, $id);
@@ -36,6 +37,6 @@ class Exclusao extends Controller
 
         $this->defineMensagem('success', 'Curso excluído com sucesso');
 
-        return new Response(200, ['Location' => '/listar-cursos']);
+        return new Response(302, ['Location' => '/listar-cursos']);
     }
 }

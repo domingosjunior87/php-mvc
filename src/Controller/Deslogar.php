@@ -11,6 +11,6 @@ class Deslogar extends Controller
     public function handle(ServerRequestInterface $request): ResponseInterface
     {
         session_destroy();
-        return new Response(200, ['Location' => '/login']);
+        return new Response(302, ['Location' => '/login']);
     }
 }
