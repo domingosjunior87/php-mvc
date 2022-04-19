@@ -1,6 +1,8 @@
 <?php
 
-use Alura\Cursos\Controller\InterfaceControladorRequisicao;
+use Nyholm\Psr7\Factory\Psr17Factory;
+use Nyholm\Psr7Server\ServerRequestCreator;
+use Psr\Http\Server\RequestHandlerInterface;
 
 require_once '../vendor/autoload.php';
 
@@ -19,6 +21,25 @@ if (!isset($_SESSION['logado']) && !in_array($caminho, ['/login', '/realiza-logi
     exit;
 }
 
-/** @var InterfaceControladorRequisicao $controlador */
+$psr17Factory = new Psr17Factory();
+
+$creator = new ServerRequestCreator(
+    $psr17Factory, // ServerRequestFactory
+    $psr17Factory, // UriFactory
+    $psr17Factory, // UploadedFileFactory
+    $psr17Factory  // StreamFactory
+);
+
+$request = $creator->fromGlobals();
+
+/** @var RequestHandlerInterface $controlador */
 $controlador = new $rotas[$caminho];
-$controlador->processaRequisicao();
+$resposta = $controlador->handle($request);
+
+foreach ($resposta->getHeaders() as $name => $values) {
+    foreach ($values as $value) {
+        header(sprintf('%s: %s', $name, $value), false);
+    }
+}
+
+echo $resposta->getBody();
